@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.p532.arbusschedules.SplashActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#5C6BC0">
+
+        <TextView
+            android:id="@+id/appName_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="cursive"
+            android:layout_centerHorizontal="true"
+            android:textSize="50dp"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:layout_marginTop="150dp"
+            android:text="@string/app_name"/>
+        <ImageView
+            android:id="@+id/splashImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/appName_textView"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/ic_bus_image"
+            android:layout_centerHorizontal="true"/>
+
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/loadingIndicator"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_below="@+id/splashImage"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="150dp"
+            app:indicatorName="PacmanIndicator"/>
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>
