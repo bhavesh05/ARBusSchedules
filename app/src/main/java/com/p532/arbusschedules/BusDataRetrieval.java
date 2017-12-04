@@ -57,11 +57,15 @@ public class BusDataRetrieval {
     private String stopID;
     private List<String> busList;
     private  Map<String,String> timeMap;
+    private List<BusDetail> busDetailList;
+    private BusDetailAdapter busDetailAdapter;
 
-    public BusDataRetrieval(Context actContext,LocationManager locationManager,  Map<String,String> timeMap){
+    public BusDataRetrieval(Context actContext,LocationManager locationManager,  Map<String,String> timeMap, List<BusDetail> busDetailList, BusDetailAdapter busDetailAdapter){
         this.locationManager=locationManager;
         this.actContext=actContext;
         this.timeMap = timeMap;
+        this.busDetailList = busDetailList;
+        this.busDetailAdapter = busDetailAdapter;
 
     }
     void getBusData(){
@@ -251,6 +255,9 @@ public class BusDataRetrieval {
                             if (attribute.getKey().equals("bustiming" )){
                                 if ( getDiff(  attribute.getValue().toString())){
                                    // stopNameText.append("1.  "+record.child("busnumber").getValue().toString()+"   "+attribute.getValue().toString()+"  ");
+                                    BusDetail busDetail = new BusDetail(bid, attribute.getValue().toString());
+                                    busDetailList.add(busDetail);
+                                    busDetailAdapter.notifyDataSetChanged();
                                     timeMap.put(bid,attribute.getValue().toString());
                                 }
                             }
