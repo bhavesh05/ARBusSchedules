@@ -10,34 +10,46 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_margin="5dp"
-        android:elevation="3dp"
-        card_view:cardCornerRadius="8dp">
+        android:layout_margin="@dimen/card_margin"
+        android:elevation="@dimen/card_elevation"
+        card_view:cardCornerRadius="@dimen/card_corner_radius">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#80CBC4">
+            android:background="@color/hive">
+
+            <ImageView
+                android:id="@+id/busimage"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:background="@color/bus_img_color"
+                android:src="@drawable/ic_bus_card"/>
 
             <TextView
                 android:id="@+id/busnum_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="5dp"
-                android:textColor="#ffffff"
-                android:textSize="20dp"/>
+                android:layout_below="@id/busimage"
+                android:background="@color/hive"
+                android:paddingLeft="@dimen/card_text_padding"
+                android:paddingRight="@dimen/card_text_padding"
+                android:paddingTop="@dimen/card_text_padding"
+                android:paddingBottom="@dimen/card_text_padding"
+                android:textColor="@color/card_text"
+                android:textSize="@dimen/card_text_title_size"/>
 
             <TextView
                 android:id="@+id/bustiming"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/busnum_title"
-                android:paddingBottom="5dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:textSize="18dp"/>
+                android:background="@color/hive"
+                android:paddingTop="@dimen/card_subtext_padding_top_bot"
+                android:paddingBottom="@dimen/card_subtext_padding_top_bot"
+                android:paddingLeft="@dimen/card_text_padding"
+                android:paddingRight="@dimen/card_text_padding"
+                android:textSize="@dimen/card_text_subtitle_size"/>
 
         </RelativeLayout>
 

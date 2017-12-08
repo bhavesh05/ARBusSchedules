@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.joda.time.LocalTime;
+import org.joda.time.Minutes;
+
 import java.util.List;
 
 /**
@@ -45,6 +48,16 @@ public class BusDetailAdapter extends RecyclerView.Adapter<BusDetailAdapter.BusD
         BusDetail busDetail = busDetailList.get(position);
         holder.busNumber.setText(busDetail.getBusNumber());
         holder.busTiming.setText(busDetail.getBusTiming());
+        LocalTime busTime = new LocalTime(busDetail.getBusTiming());
+        LocalTime nowTime = LocalTime.now();
+        int minutesDiff = Math.abs(Minutes.minutesBetween(busTime, nowTime).getMinutes());
+        if(minutesDiff <= 5){
+            holder.busTiming.setBackgroundResource(R.color.mins5);
+        }else if(minutesDiff <= 10){
+            holder.busTiming.setBackgroundResource(R.color.mins10);
+        }else{
+            holder.busTiming.setBackgroundResource(R.color.mins15);
+        }
     }
 
     @Override
