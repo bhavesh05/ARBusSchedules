@@ -4,12 +4,15 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import net.danlew.android.joda.JodaTimeAndroid;
 
 import eu.kudan.kudan.ARAPIKey;
 
@@ -21,7 +24,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
+        JodaTimeAndroid.init(this);
         ARAPIKey arapiKey = ARAPIKey.getInstance();
         arapiKey.setAPIKey(getString(R.string.api_key));
 
@@ -58,8 +61,14 @@ public class SplashActivity extends AppCompatActivity {
 
     //Function to start ARMainActivity
     private void startARActivity(){
-        Intent intent = new Intent(SplashActivity.this, ARMainActivity.class);
-        startActivity(intent);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(SplashActivity.this, ARMainActivity.class);
+                startActivity(intent);
+            }
+        }, 9000);
     }
 
     //Function to handle when Permissions are not granted
