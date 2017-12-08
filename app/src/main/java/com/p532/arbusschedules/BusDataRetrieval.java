@@ -57,11 +57,15 @@ public class BusDataRetrieval {
     private String stopID;
     private List<String> busList;
     private  Map<String,String> timeMap;
+    private List<BusDetail> busDetailList;
+    private BusDetailAdapter busDetailAdapter;
 
-    public BusDataRetrieval(Context actContext,LocationManager locationManager,  Map<String,String> timeMap){
+    public BusDataRetrieval(Context actContext,LocationManager locationManager,  Map<String,String> timeMap, List<BusDetail> busDetailList, BusDetailAdapter busDetailAdapter){
         this.locationManager=locationManager;
         this.actContext=actContext;
         this.timeMap = timeMap;
+        this.busDetailList = busDetailList;
+        this.busDetailAdapter = busDetailAdapter;
 
     }
     void getBusData(){
@@ -152,7 +156,7 @@ public class BusDataRetrieval {
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Stops");
         GeoFire geoFire = new GeoFire(ref);
-        GeoQuery geoQuery = geoFire.queryAtLocation(geoLocation,500);
+        GeoQuery geoQuery = geoFire.queryAtLocation(geoLocation,1000);
 
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
@@ -231,6 +235,8 @@ public class BusDataRetrieval {
 
     private void getBusTimings(final List<String> busList) {
 
+        busDetailList.clear();
+
         Log.d("getBusTimings", "The bus list received: "+busList.toString()+"========>");
         DatabaseReference busTimingRef = FirebaseDatabase.getInstance().getReference().child("BusTimings");
         // final String bid = busList.get(0);
@@ -251,6 +257,9 @@ public class BusDataRetrieval {
                             if (attribute.getKey().equals("bustiming" )){
                                 if ( getDiff(  attribute.getValue().toString())){
                                    // stopNameText.append("1.  "+record.child("busnumber").getValue().toString()+"   "+attribute.getValue().toString()+"  ");
+                                    BusDetail busDetail = new BusDetail(bid, attribute.getValue().toString());
+                                    busDetailList.add(busDetail);
+                                    busDetailAdapter.notifyDataSetChanged();
                                     timeMap.put(bid,attribute.getValue().toString());
                                 }
                             }
@@ -277,7 +286,7 @@ public class BusDataRetrieval {
         calendar.setTime(date);   // assigns calendar to given date
         int hour = calendar.get(Calendar.HOUR_OF_DAY); // gets hour in 24h format
         int minute =   calendar.get(Calendar.MINUTE);       // gets month number, NOTE this is zero based!
-        int nowMin = 1210;
+        int nowMin = hour*60+minute;
 
         int timeDiff = busMin-nowMin;
 
