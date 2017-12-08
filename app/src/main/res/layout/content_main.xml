@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
-    android:background="#fffffffff"
+    android:background="#005C6BC0"
     tools:context=".ARMainActivity"
     tools:showIn="@layout/activity_armain">
 

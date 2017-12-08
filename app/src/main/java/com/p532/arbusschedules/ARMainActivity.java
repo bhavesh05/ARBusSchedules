@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +20,9 @@ import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
 import eu.kudan.kudan.ARActivity;
+import eu.kudan.kudan.ARImageTrackable;
+import eu.kudan.kudan.ARImageTrackableListener;
+import eu.kudan.kudan.ARImageTracker;
 
 public class ARMainActivity extends ARActivity {
 
@@ -37,6 +41,9 @@ public class ARMainActivity extends ARActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         busDetailList = new ArrayList<>();
         busDetailAdapter = new BusDetailAdapter(this, busDetailList);
+
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.contentmain_rellayout);
+        relativeLayout.setVisibility(View.GONE);
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
@@ -62,6 +69,42 @@ public class ARMainActivity extends ARActivity {
     @Override
     public void setup() {
         super.setup();
+        ARImageTrackable arImageTrackable = new ARImageTrackable("Bloomington Transit");
+        arImageTrackable.loadFromAsset("mobilebus.jpg");
+
+        ARImageTracker arImageTracker = ARImageTracker.getInstance();
+        arImageTracker.initialise();
+
+        arImageTracker.addTrackable(arImageTrackable);
+
+        arImageTrackable.addListener(new ARImageTrackableListener() {
+            @Override
+            public void didDetect(ARImageTrackable arImageTrackable) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.contentmain_rellayout);
+                        relativeLayout.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+
+            @Override
+            public void didTrack(ARImageTrackable arImageTrackable) {
+
+            }
+
+            @Override
+            public void didLose(ARImageTrackable arImageTrackable) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.contentmain_rellayout);
+                        relativeLayout.setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
