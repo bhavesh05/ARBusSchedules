@@ -20,9 +20,15 @@ import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
 import eu.kudan.kudan.ARActivity;
+import eu.kudan.kudan.ARGyroPlaceManager;
 import eu.kudan.kudan.ARImageTrackable;
 import eu.kudan.kudan.ARImageTrackableListener;
 import eu.kudan.kudan.ARImageTracker;
+import eu.kudan.kudan.ARLightMaterial;
+import eu.kudan.kudan.ARMeshNode;
+import eu.kudan.kudan.ARModelImporter;
+import eu.kudan.kudan.ARModelNode;
+import eu.kudan.kudan.ARTexture2D;
 
 public class ARMainActivity extends ARActivity {
 
@@ -74,6 +80,12 @@ public class ARMainActivity extends ARActivity {
 
         ARImageTracker arImageTracker = ARImageTracker.getInstance();
         arImageTracker.initialise();
+        ARModelNode modelNode = prepareModel();
+        final ARGyroPlaceManager gyroPlaceManager = ARGyroPlaceManager.getInstance();
+        gyroPlaceManager.initialise();
+        gyroPlaceManager.getWorld().addChild(modelNode);
+        gyroPlaceManager.getWorld().findChildByName("Car").setPosition(0.0f, -100f, 0.0f);
+        gyroPlaceManager.getWorld().findChildByName("Car").setVisible(false);
 
         arImageTracker.addTrackable(arImageTrackable);
 
@@ -103,6 +115,7 @@ public class ARMainActivity extends ARActivity {
                         relativeLayout.setVisibility(View.GONE);
                     }
                 });
+                gyroPlaceManager.getWorld().findChildByName("Car").setVisible(true);
             }
         });
     }
@@ -110,5 +123,25 @@ public class ARMainActivity extends ARActivity {
     private int dpToPx(int dp) {
         Resources resources = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.getDisplayMetrics()));
+    }
+
+    private ARModelNode prepareModel(){
+        ARModelImporter modelImporter = new ARModelImporter();
+        modelImporter.loadFromAsset("delorean.jet");
+        ARModelNode modelNode = modelImporter.getNode();
+        modelNode.setName("Car");
+
+        ARTexture2D texture2D = new ARTexture2D();
+        texture2D.loadFromAsset("delorean.png");
+
+        ARLightMaterial material = new ARLightMaterial();
+        material.setTexture(texture2D);
+        material.setAmbient(0.8f,0.8f,0.8f);
+        for (ARMeshNode meshNode : modelImporter.getMeshNodes()) {
+            meshNode.setMaterial(material);
+        }
+
+        modelNode.scaleByUniform(2.25f);
+        return modelNode;
     }
 }
